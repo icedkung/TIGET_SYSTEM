@@ -155,17 +155,168 @@ CREATE TABLE EVENTS_ENHYPHEN_SM (
   i INTEGER(1) DEFAULT 1 NOT NULL
 );`
 
-
-
 ];
-for (let i = 0; i < createTableSQL.length; i++) {
-  db.run(createTableSQL[i], (err) => {
+
+const enhypenSeat = [
+  `
+CREATE TABLE EVENTS_ENHYPHEN_BL (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_BR (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_RC (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_SC (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_SE (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_SK (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`,
+
+`
+CREATE TABLE EVENTS_ENHYPHEN_SM (
+  seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  a INTEGER(1) DEFAULT 1 NOT NULL,
+  b INTEGER(1) DEFAULT 1 NOT NULL,
+  c INTEGER(1) DEFAULT 1 NOT NULL,
+  d INTEGER(1) DEFAULT 1 NOT NULL,
+  e INTEGER(1) DEFAULT 1 NOT NULL,
+  f INTEGER(1) DEFAULT 1 NOT NULL,
+  g INTEGER(1) DEFAULT 1 NOT NULL,
+  h INTEGER(1) DEFAULT 1 NOT NULL,
+  i INTEGER(1) DEFAULT 1 NOT NULL
+);`
+];
+// for (let i = 0; i < createTableSQL.length; i++) {
+//   db.run(createTableSQL[i], (err) => {
+//     if (err) {
+//       console.error(err.message);
+//     }
+//     console.log('Table '+ i + ' created successfully');
+//   });
+// }
+const dropTable = (tableName) => {
+  const sql = `DROP TABLE ${tableName}`;
+  db.run(sql, (err) => {
     if (err) {
       console.error(err.message);
     }
-    console.log('Table '+ i + ' created successfully');
+    console.log('Table dropped successfully');
   });
 }
+
+const insertIntoEnhypen = (tableName, seatNo, a, b, c, d, e, f, g, h, i) => {
+  const sql = `INSERT INTO ${tableName} (seatNo, a, b, c, d, e, f, g, h, i) VALUES (?,?,?,?,?,?,?,?,?,?)`;
+  db.run(sql, [seatNo, a, b, c, d, e, f, g, h, i], (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Row inserted successfully');
+  });
+};
+
+
+const createTableEnhypen = (tableName) => {
+  const sql = `CREATE TABLE ${tableName} (
+    seatNo INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    a INTEGER(1) DEFAULT 1 NOT NULL,
+    b INTEGER(1) DEFAULT 1 NOT NULL,
+    c INTEGER(1) DEFAULT 1 NOT NULL,
+    d INTEGER(1) DEFAULT 1 NOT NULL,
+    e INTEGER(1) DEFAULT 1 NOT NULL,
+    f INTEGER(1) DEFAULT 1 NOT NULL,
+    g INTEGER(1) DEFAULT 1 NOT NULL,
+    h INTEGER(1) DEFAULT 1 NOT NULL,
+    i INTEGER(1) DEFAULT 1 NOT NULL
+  );`;
+  db.run(sql, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Table created successfully');
+  });
+}
+
+ for (let i = 1; i <= 10; i++) {
+   insertIntoEnhypen('EVENTS_ENHYPHEN_BL', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_BR', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_RC', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_SC', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_SE', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_SK', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+   insertIntoEnhypen('EVENTS_ENHYPHEN_SM', i, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+ }
+
 
 db.close((err) => {
     if (err) {
@@ -173,3 +324,5 @@ db.close((err) => {
     }
     console.log('Close the database connection.');
   });
+
+

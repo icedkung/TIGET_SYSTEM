@@ -9,7 +9,7 @@ const ejs = require("ejs");
 // const { createEventTable, testEventInsert, keyGen } = require("./events/event.js");
 const { mailer } = require("./events/ticketmailler.js");
 const hostServer = 'localhost';
-const portServer = 3000;
+const portServer = 443;
 
 //import mysql config and get connection
 // const { host, user, port, password, database } = require("./config/sqlconfig.js");
@@ -66,7 +66,7 @@ router.get("/", (req, res) => {
       res.write("<p>Error, while loading event :" + err.sqlMessage +"</p>");
     } else {
       console.log('Homepage loaded');
-      console.log(rows);
+      //console.log(rows);
        res.render(path.join(__dirname + "/./dist/index.ejs"), {
         eventData: rows,
       });
@@ -125,7 +125,7 @@ router.get("/Events/search", (req, res) => {
     console.error(err.message);
     res.end();
   } else {
-    console.log(rows);
+    //console.log(rows);
     res.render(path.join(__dirname + "/./dist/event_search.ejs"), {
       eventData: rows,
       Key: key
@@ -186,7 +186,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?);`;
 
 db.run(insertSQL, [ticketCode, ticketPrice, buyerName, buyerEmail, buyerPhone, BuyerPayment, BuyerPaymentStatus, eventCode], (err) => {
     if (err) {
-      res.send("alert('Got error while create your ticket request'); window.location.href = '/Events'; ");
+      res.write('<script>alert("Got error while request your ticket please try again later."); window.location.href = "/"Events";</script>');
     } else {
       console.log('ticket request success');
       let mailSubject = `From Tiget! Hello ${buyerName}, Ticket Code for ${eventCode}`;
@@ -202,8 +202,7 @@ db.run(insertSQL, [ticketCode, ticketPrice, buyerName, buyerEmail, buyerPhone, B
       <p>TiGet Team</p>
       `
       mailer(buyerEmail, mailSubject, mailBody, ticketPrice);
-      res.send(`alert('Ticket pending, please check your email to comfirm your payment details and activate ticket code'); window.location.href = '/Events/${eventCode}'`);
-
+      res.write('<script>alert("Ticket pending, please check your email to comfirm your payment details and activate ticket code"); window.location.href = "/Events/${eventCode}";</script>');
     }
   });
   console.log(req.query);
@@ -228,7 +227,7 @@ router.get('/ticketRequest/offline/:ticketPrice/:eventType/:eventCode', (req, re
   console.log(querySQL);
   db.run(querySQL, [ticketCode, ticketPrice, buyerName, buyerEmail, buyerPhone, BuyerPayment, BuyerPaymentStatus, eventCode, 's', ticketZone, ticketSeat], function(err) {
     if (err) {
-      res.send(`alert('Got error while create your ticket'); window.location.href = '/Events/${eventCode}'`);
+      res.write(`<script>alert("Got error while request your ticket please try again later."); window.location.href = "/"Events/${eventCode}";</script>`);
       console.error(err.message);
     }else {
       console.log(`Successfully inserted data into EVENTS_TICKET table.`);
@@ -237,7 +236,7 @@ router.get('/ticketRequest/offline/:ticketPrice/:eventType/:eventCode', (req, re
 
     db.run(`UPDATE EVENTS_ENHYPHEN_${ticketZone} SET ${seat[0]} = '0' WHERE seatNo = ${seat[1]}`, function(err2) {
         if (err2) {
-          res.send(`alert('Got error while create your ticket request'); window.location.href = '/Events/${eventCode}'`);
+          res.write(`<script>alert("Got error while request your ticket please try again later."); window.location.href = "/"Events/${eventCode}";</script>`);
         } else {
           let mailSubject = `From Tiget! Hello ${buyerName}, Ticket Code for ${eventCode}`;
           let mailBody = `<h1>Hi ${buyerName}, From TiGet</h1><br>
@@ -254,8 +253,8 @@ router.get('/ticketRequest/offline/:ticketPrice/:eventType/:eventCode', (req, re
           
           `
           mailer(buyerEmail, mailSubject, mailBody, ticketPrice);
-          res.send(`alert('Ticket pending, please check your email to comfirm your payment details and activate ticket code'); window.location.href = '/Events/${eventCode}'`);
-        }
+        res.write(`<script>alert("Ticket pending, please check your email to comfirm your payment details and activate ticket code"); window.location.href = "/Events/${eventCode}";</script>`);
+      }
       });
 
     }
@@ -269,10 +268,10 @@ router.get('/Ticket/checkTicket', (req, res) => {
   db.all(querySQL, [], (err, rows) => {
     if(err) {
       console.log(err.message);
-      res.send(`alert('Got error while checking your ticket'); window.location.href = '/Ticket'`);
+      res.write(`<script>alert("Got error while checking your ticket"); window.location.href = "/Ticket";</script>`);
     }
     else {
-      console.log(rows);
+     // console.log(rows);
       if(rows.length === 0) {
         const notFound = {
           ticketCode: 'not found',
@@ -302,31 +301,31 @@ router.get('/watchOnline', (req, res) => {
 router.get('/watchOnline/Live', (req, res) => {
   let ticketCode = req.query.ticketCode;
   if(ticketCode === undefined) {
-    res.send(`alert('Ticket code not found ,Please enter your ticket code or contact us'); window.location.href = '/watchOnline'`)
+    res.write(`<script>alert("Ticket code not found ,Please enter your ticket code or contact us"); window.location.href = "/watchOnline";</script>`);
   }else if(ticketCode.startsWith('S')) {
-    res.send(`alert('Ticket code is not for online event, Please enter your ticket code or contact us'); window.location.href = '/watchOnline'`);
+    res.write(`<script>alert("Ticket code is not for online event, Please enter your ticket code or contact us"); window.location.href = "/watchOnline";</script>`);
   }else{
     let result1;
   let querySQL = `SELECT * FROM EVENTS_TICKET WHERE ticketCode = '${ticketCode}';`;
   db.all(querySQL, [], (err, rows) => {
     if(err) {
       console.log(err);
-      res.send(`alert('ticket code not found, Please enter your ticket code or contact us'); window.location.href = '/watchOnline'`);
+      res.write(`<script>alert("Ticket code not found ,Please enter your ticket code or contact us"); window.location.href = "/watchOnline";</script>`);
     }
     else {
-      console.log(rows);
+      //console.log(rows);
       if(rows.length === 0) {
-        res.send(`alert('Ticket not found, Please enter your ticket code or contact us'); window.location.href = '/watchOnline'`);
+        res.write(`<script>alert("Ticket code not found ,Please enter your ticket code or contact us"); window.location.href = "/watchOnline";</script>`);
       } else {
         let eventCode = rows[0].EventCode;
         let sqlQuery2 = `SELECT * FROM EVENTS_ONLINE_LIVE WHERE EventCode = '${eventCode}';`;
         db.all(sqlQuery2, [], (err2, rows2) => {
           if(err2) {
             console.log(err2);
-            res.send(`alert('Event not found, Please enter your ticket code or contact us'); window.location.href = '/watchOnline'`);
+            res.write(`<script>alert("Event not found, Please enter your ticket code or contact us"); window.location.href = "/watchOnline";</script>`)
           }
           else {
-            console.log(rows2);
+            //console.log(rows2);
             res.render(path.join(__dirname + `/./dist/event_live.ejs`), { CODE: rows2[0].EventCode, LiveLink: rows2[0].LiveLink })  ;
         }});
       }
@@ -348,10 +347,13 @@ router.get('/seat', (req, res) => {
 
 
   let querySQL = `SELECT * FROM EVENTS_ENHYPHEN_${eventZone};`;
+  console.log("EventZone " + eventZone);
+  console.log("Zone query "  + querySQL);
+  
   db.all(querySQL, [], (err, rows) => {
     if(err) {
       console.log(err.message);
-      res.send(`alert('Event not found please contact us for more information'); window.location.href = '/Events'`);
+      res.write(`<script>alert("Event not found please contact us for more information"); window.location.href "/Events";)</script>`)
     }
     else {
       console.log(rows);
@@ -371,7 +373,7 @@ app.use('/Ticket/figmaAssets', express.static(path.join(__dirname, "/./dist/figm
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/", router);
-const server = app.listen(portServer, hostServer, () => {
+const server = app.listen(portServer, () => {
   console.log(`Listening on http://${server.address().address}:${server.address().port}`);
 });
 
@@ -423,7 +425,7 @@ adminClient.get('/viewEvents/:key', (req, res) => {
       res.end();
     }
     else {
-      console.log(rows);
+      //console.log(rows);
     res.render(path.join(__dirname + '/./dist/adminsys_viewevents.ejs'), { eventData: rows });
   }
 });
@@ -498,7 +500,7 @@ adminClient.get('/editEvent/:eventKey', (req, res) => {
       res.end();
     }
     else {
-      console.log(rows);
+      //console.log(rows);
       res.render(path.join(__dirname + '/./dist/adminsys_editevents.ejs'), { eventData: rows[0] });
     }
   });
@@ -590,7 +592,7 @@ adminClient.get('/ViewAllTicket/:adminKey', (req, res) => {
         res.write('Error'+ err.message);
         res.end();
       }else {
-        console.log(rows);
+        //console.log(rows);
         res.render(path.join(__dirname + '/./dist/adminsys_listticket.ejs'), { ticket: rows });
       }
 

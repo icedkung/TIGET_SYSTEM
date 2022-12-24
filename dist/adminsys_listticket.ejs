@@ -5,6 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket | admin</title>
+  <style>
+        h1{
+            font-family: 'Courier New', Courier, monospace;
+        }
+        body{
+            background-color: #ddd;
+        }
+        td, th{
+            border-left: 1px solid rgb(206, 206, 206);
+            border-left: 1px solid rgb(206, 206, 206);
+            border-bottom: 1px solid rgb(138, 138, 138);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 15px;
+            text-align: left;
+        }
+        th{
+            font-weight: bold;
+            background-color: rgb(208, 199, 171);
+        }
+        td:hover {
+            background-color: rgb(247, 246, 242);
+        }
+        a:link, a:visited {
+        background-color: rgb(154, 154, 154);;
+         color: white;
+         padding: 10px 20px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+        }
+        a:hover, a:active {
+        background-color: rgb(180, 172, 148);;
+        }
+    </style>
 </head>
 <body>
     <h1>Ticket List</h1>
@@ -36,9 +70,10 @@
                     <td><%= ticket[i].BuyerPayment %></td>
                     <td><%= ticket[i].BuyerPaymentStatus %></td>
                     <td><%= ticket[i].EventCode %></td>
-                    <td><%= ticket[i].EventType %></td>
-                    <td><%= ticket[i].ticketZone %></td>
-                    <td><%= ticket[i].ticketSeat %></td>
+                    <td><%= ticket[i].EventType == 'o' ? 'Online' : 'Offline' %></td>
+                  <% console.log(ticket[i].ticketZone) %>
+                    <td><%= ticket[i].ticketZone == null ? 'Online' : ticket[i].ticketZone %></td>
+                    <td><%= ticket[i].ticketSeat == null ? 'Online' : ticket[i].ticketSeat %></td>
                     <td>
                         <button onclick="approvePayment('<%= ticket[i].ticketCode %>')" style="color:green;">Approve</button>
                     <button onclick="deleteTicket('<%= ticket[i].ticketCode %>')" style="color:red;">Delete</button> 
